@@ -24,6 +24,31 @@ where
     increases
 }
 
+pub fn count_increases_sliding<P>(file: P) -> u64
+where
+    P: AsRef<Path>,
+{
+    let all_numbers = read_lines(file)
+        .expect("Could not read lines of file!")
+        .map(|line| line.unwrap_or(String::new()).parse().unwrap_or(0))
+        .collect::<Vec<_>>();
+    let all_windows = all_numbers.windows(3);
+
+    let mut previous_window_sum: u64 = MAX;
+    let mut increases: u64 = 0;
+
+    for window in all_windows {
+        let window_sum = window.iter().sum();
+        if window_sum > previous_window_sum {
+            increases += 1;
+        }
+
+        previous_window_sum = window_sum;
+    }
+
+    increases
+}
+
 fn read_lines<P>(file: P) -> io::Result<io::Lines<io::BufReader<File>>>
 where
     P: AsRef<Path>,
@@ -34,11 +59,17 @@ where
 
 #[cfg(test)]
 mod tests {
-    use super::count_increases;
+    use super::{count_increases, count_increases_sliding};
 
     #[test]
     fn test_increases() {
         let increases = count_increases("test.txt");
         assert_eq!(increases, 7);
+    }
+
+    #[test]
+    fn test_increases_sliding() {
+        let increases = count_increases_sliding("test.txt");
+        assert_eq!(increases, 5);
     }
 }
