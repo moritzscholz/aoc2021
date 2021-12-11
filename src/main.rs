@@ -1,6 +1,7 @@
 mod file_handler;
 mod sonar_depth;
 mod submarine;
+use crate::submarine::Submarine;
 
 fn main() {
     // Day 1
@@ -11,7 +12,7 @@ fn main() {
     );
 
     // Day 2
-    let mut submarine = submarine::Submarine::new();
+    let mut submarine = submarine::SimpleSubmarine::new();
     submarine.change_position_from("data/day2/input.txt");
     print!(
         "Solution for day 2: final horizontal position * final depth = {:?}",
