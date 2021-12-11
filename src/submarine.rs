@@ -1,6 +1,9 @@
-struct Submarine {
+use crate::file_handler::read_lines;
+use std::path::Path;
+
+pub struct Submarine {
     depth: i64,
-    position: i64,
+    position_h: i64,
 }
 
 /// Direction for the submarine to move in + distance
@@ -37,21 +40,42 @@ impl SubmarineMovement {
 
 impl Submarine {
     /// Create a new submarine at position 0, depth 0.
-    fn new() -> Submarine {
+    pub fn new() -> Submarine {
         Submarine {
             depth: 0,
-            position: 0,
+            position_h: 0,
         }
     }
 
     /// Moves the submarine
     fn change_position(&mut self, direction: SubmarineMovement) {
         match direction {
-            SubmarineMovement::Forward(d) => self.position += d,
+            SubmarineMovement::Forward(d) => self.position_h += d,
             SubmarineMovement::Up(d) => self.depth -= d,
             SubmarineMovement::Down(d) => self.depth += d,
             SubmarineMovement::Stay => (),
         }
+    }
+
+    /// Moves the submarine based on a given list of instructions.
+    /// Instructions are given as text-file with one line per instruction,
+    /// formatted as described in `SubmarineMovement`.
+    pub fn change_position_from<P>(&mut self, instruction_file: P)
+    where
+        P: AsRef<Path>,
+    {
+        let instructions = read_lines(instruction_file)
+            .expect("Could not read instruction file")
+            .map(|line| SubmarineMovement::from(&line.unwrap_or_default()));
+
+        for instruction in instructions {
+            self.change_position(instruction);
+        }
+    }
+
+    /// Create the product of depth & position, as answer to the challenge.
+    pub fn position_hash(&self) -> i64 {
+        self.depth * self.position_h
     }
 }
 
@@ -78,19 +102,30 @@ mod tests {
     #[test]
     fn test_submarine_movement() {
         let mut submarine = Submarine::new();
-        assert_eq!(submarine.position, 0);
+        assert_eq!(submarine.position_h, 0);
         assert_eq!(submarine.depth, 0);
 
         submarine.change_position(SubmarineMovement::Forward(4));
-        assert_eq!(submarine.position, 4);
+        assert_eq!(submarine.position_h, 4);
         assert_eq!(submarine.depth, 0);
 
         submarine.change_position(SubmarineMovement::Down(9));
-        assert_eq!(submarine.position, 4);
+        assert_eq!(submarine.position_h, 4);
         assert_eq!(submarine.depth, 9);
 
         submarine.change_position(SubmarineMovement::Up(3));
-        assert_eq!(submarine.position, 4);
+        assert_eq!(submarine.position_h, 4);
         assert_eq!(submarine.depth, 6);
+    }
+
+    #[test]
+    fn test_submarine_movement_from_instruction_file() {
+        let mut submarine = Submarine::new();
+        assert_eq!(submarine.position_hash(), 0);
+
+        submarine.change_position_from("data/day2/test.txt");
+        assert_eq!(submarine.position_hash(), 150);
+        assert_eq!(submarine.position_h, 15);
+        assert_eq!(submarine.depth, 10);
     }
 }
