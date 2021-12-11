@@ -63,13 +63,13 @@ mod tests {
 
     #[test]
     fn test_increases() {
-        let increases = count_increases("test.txt");
+        let increases = count_increases("data/day1/test.txt");
         assert_eq!(increases, 7);
     }
 
     #[test]
     fn test_increases_sliding() {
-        let increases = count_increases_sliding("test.txt");
+        let increases = count_increases_sliding("data/day1/test.txt");
         assert_eq!(increases, 5);
     }
 }
