@@ -1,7 +1,6 @@
-use std::fs::File;
-use std::io::{self, BufRead};
 use std::path::Path;
 use std::u64::MAX;
+use crate::file_handler::read_lines;
 
 pub fn count_increases<P>(file: P) -> u64
 where
@@ -47,14 +46,6 @@ where
     }
 
     increases
-}
-
-fn read_lines<P>(file: P) -> io::Result<io::Lines<io::BufReader<File>>>
-where
-    P: AsRef<Path>,
-{
-    let file = File::open(file)?;
-    Ok(io::BufReader::new(file).lines())
 }
 
 #[cfg(test)]

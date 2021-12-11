@@ -1,3 +1,4 @@
+mod file_handler;
 mod sonar_depth;
 
 fn main() {
