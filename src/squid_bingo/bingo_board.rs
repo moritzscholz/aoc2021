@@ -4,6 +4,7 @@ struct BingoNumber {
     marked: bool,
 }
 
+#[derive(Debug)]
 pub struct BingoBoard {
     board: Vec<Vec<BingoNumber>>,
 }

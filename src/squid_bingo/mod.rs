@@ -4,6 +4,7 @@ use std::path::Path;
 
 use crate::file_handler::read_all;
 
+#[derive(Debug)]
 pub struct BingoGame {
     // Boards of all players in the game
     boards: Vec<BingoBoard>,
@@ -61,6 +62,7 @@ impl BingoGame {
         }
     }
 
+    /// Simulate the game until the first board wins
     pub fn simulate(&mut self) -> Option<BingoGameResult> {
         // Simulate all boards
         for number in &self.drawn_numbers {
@@ -72,6 +74,33 @@ impl BingoGame {
                         winning_board_score: board.score(),
                         last_drawn_number: *number,
                     });
+                }
+            }
+        }
+
+        None
+    }
+
+    /// Simulate the game until the last board wins & return the result
+    /// of the last board.
+    pub fn simulate_until_end(&mut self) -> Option<BingoGameResult> {
+        let mut boards_left = self.boards.len();
+
+        for number in &self.drawn_numbers {
+            for board in self.boards.iter_mut() {
+                let board_already_won = board.has_won();
+                board.mark_number(number);
+
+                // If this was the last board and it has won, return result.
+                if board.has_won() && !board_already_won {
+                    boards_left -= 1;
+
+                    if boards_left == 0 {
+                        return Some(BingoGameResult {
+                            winning_board_score: board.score(),
+                            last_drawn_number: *number,
+                        });
+                    }
                 }
             }
         }
@@ -111,5 +140,17 @@ mod tests {
         assert_eq!(result.winning_board_score, 188);
         assert_eq!(result.last_drawn_number, 24);
         assert_eq!(result.answer(), 4512);
+    }
+
+    #[test]
+    fn simulate_game_until_end() {
+        let mut game = BingoGame::build_from("data/day4/test.txt");
+        let result = game.simulate_until_end().unwrap();
+
+        println!("{:#?}", game);
+
+        assert_eq!(result.last_drawn_number, 13);
+        assert_eq!(result.winning_board_score, 148);
+        assert_eq!(result.answer(), 1924);
     }
 }

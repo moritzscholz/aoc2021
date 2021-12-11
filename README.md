@@ -15,7 +15,7 @@ Right now, I plan to do all challenges with Rust. Pulling the repository and run
 Tests can be run with `cargo test`. Tests are included in the source-file of the code they are testing.
 
 ## Progress
-⭐️⭐️⭐️⭐️⭐️☆⭐️☆☆☆
+⭐️⭐️⭐️⭐️⭐️☆⭐️⭐️☆☆
 ☆☆☆☆☆☆☆☆☆☆☆☆☆☆
 ☆☆☆☆☆☆☆☆☆☆☆☆☆☆
 ☆☆☆☆☆☆☆☆☆☆☆☆

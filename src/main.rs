@@ -37,8 +37,15 @@ fn main() {
     let mut game = squid_bingo::BingoGame::build_from("data/day4/input.txt");
     let result = game.simulate().unwrap();
     print!(
-        "Solution for day 4: winning board's score * last number = {:?}",
+        "Solution for day 4: winning board's score * last number = {:?}. ",
         result.answer()
     );
-    println!();
+    let mut game2 = squid_bingo::BingoGame::build_from("data/day4/input.txt");
+    let result_end = game2
+        .simulate_until_end()
+        .unwrap_or_else(|| panic!("Game did not finish. {:#?}", game2));
+    println!(
+        "Last board to win, score * last number = {:?}!",
+        result_end.answer()
+    );
 }
