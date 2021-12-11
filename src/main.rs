@@ -3,6 +3,7 @@ mod sonar_depth;
 mod submarine;
 use crate::submarine::Submarine;
 mod binary_diagnostic;
+mod squid_bingo;
 
 fn main() {
     // Day 1
@@ -30,4 +31,14 @@ fn main() {
         "Solution for day 3: Power consumption = {:?}",
         diagnostics_result.power_consumption()
     );
+    println!();
+
+    // Day 4
+    let mut game = squid_bingo::BingoGame::build_from("data/day4/input.txt");
+    let result = game.simulate().unwrap();
+    print!(
+        "Solution for day 4: winning board's score * last number = {:?}",
+        result.answer()
+    );
+    println!();
 }
