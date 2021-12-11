@@ -15,7 +15,10 @@ fn main() {
     let mut submarine = submarine::SimpleSubmarine::new();
     submarine.change_position_from("data/day2/input.txt");
     print!(
-        "Solution for day 2: final horizontal position * final depth = {:?}",
+        "Solution for day 2: final horizontal position * final depth = {:?}. ",
         submarine.position_hash()
     );
+    let mut aimed_submarine = submarine::AimedSubmarine::new();
+    aimed_submarine.change_position_from("data/day2/input.txt");
+    println!("Aimed submarine: {:?}.", aimed_submarine.position_hash());
 }

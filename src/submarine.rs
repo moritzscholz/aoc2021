@@ -30,6 +30,12 @@ pub struct SimpleSubmarine {
     position_h: i64,
 }
 
+pub struct AimedSubmarine {
+    depth: i64,
+    position_h: i64,
+    aim: i64,
+}
+
 /// Direction for the submarine to move in + distance
 #[derive(PartialEq, Debug)]
 pub enum SubmarineMovement {
@@ -87,12 +93,42 @@ impl Submarine for SimpleSubmarine {
     }
 }
 
+impl AimedSubmarine {
+    pub fn new() -> AimedSubmarine {
+        AimedSubmarine {
+            depth: 0,
+            position_h: 0,
+            aim: 0,
+        }
+    }
+}
+
+impl Submarine for AimedSubmarine {
+    fn change_position(&mut self, direction: SubmarineMovement) {
+        match direction {
+            SubmarineMovement::Forward(d) => {
+                self.position_h += d;
+                self.depth += self.aim * d;
+            }
+            SubmarineMovement::Up(d) => self.aim -= d,
+            SubmarineMovement::Down(d) => self.aim += d,
+            SubmarineMovement::Stay => (),
+        }
+    }
+
+    fn position_hash(&self) -> i64 {
+        self.depth * self.position_h
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use super::{SimpleSubmarine, Submarine, SubmarineMovement};
+    use super::{
+        AimedSubmarine, SimpleSubmarine, Submarine, SubmarineMovement,
+    };
 
     #[test]
-    fn test_movement_decode() {
+    fn movement_decode() {
         assert_eq!(
             SubmarineMovement::from("forward 9"),
             SubmarineMovement::Forward(9)
@@ -108,7 +144,7 @@ mod tests {
     }
 
     #[test]
-    fn test_submarine_movement() {
+    fn submarine_movement() {
         let mut submarine = SimpleSubmarine::new();
         assert_eq!(submarine.position_h, 0);
         assert_eq!(submarine.depth, 0);
@@ -127,7 +163,7 @@ mod tests {
     }
 
     #[test]
-    fn test_submarine_movement_from_instruction_file() {
+    fn submarine_movement_from_instruction_file() {
         let mut submarine = SimpleSubmarine::new();
         assert_eq!(submarine.position_hash(), 0);
 
@@ -135,5 +171,16 @@ mod tests {
         assert_eq!(submarine.position_hash(), 150);
         assert_eq!(submarine.position_h, 15);
         assert_eq!(submarine.depth, 10);
+    }
+
+    #[test]
+    fn aimed_submarine_movement() {
+        let mut submarine = AimedSubmarine::new();
+        assert_eq!(submarine.position_hash(), 0);
+
+        submarine.change_position_from("data/day2/test.txt");
+        assert_eq!(submarine.position_hash(), 900);
+        assert_eq!(submarine.position_h, 15);
+        assert_eq!(submarine.depth, 60);
     }
 }
