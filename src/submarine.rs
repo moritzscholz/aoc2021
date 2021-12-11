@@ -52,12 +52,14 @@ impl SubmarineMovement {
     ///
     /// Available instructions: forward, down, up
     fn from(instruction: &str) -> SubmarineMovement {
-        let parts: Vec<_> = instruction.split(" ").collect();
+        let parts: Vec<_> = instruction.split(' ').collect();
         let direction: &str = parts[0];
-        let distance: i64 = parts[1].parse().expect(&format!(
-            "Could not parse direction of given instruction {}",
-            instruction
-        ));
+        let distance: i64 = parts[1].parse().unwrap_or_else(|_| {
+            panic!(
+                "Could not parse direction of given instruction {}",
+                instruction
+            )
+        });
 
         match direction {
             "forward" => SubmarineMovement::Forward(distance),

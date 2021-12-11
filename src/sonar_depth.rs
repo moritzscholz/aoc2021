@@ -1,6 +1,6 @@
+use crate::file_handler::read_lines;
 use std::path::Path;
 use std::u64::MAX;
-use crate::file_handler::read_lines;
 
 pub fn count_increases<P>(file: P) -> u64
 where
@@ -11,7 +11,7 @@ where
 
     if let Ok(lines) = read_lines(file) {
         for line in lines {
-            let number = line.unwrap_or(String::new()).parse().unwrap_or(0);
+            let number = line.unwrap_or_default().parse().unwrap_or(0);
             if number > previous_value {
                 increases += 1;
             }
@@ -29,7 +29,7 @@ where
 {
     let all_numbers = read_lines(file)
         .expect("Could not read lines of file!")
-        .map(|line| line.unwrap_or(String::new()).parse().unwrap_or(0))
+        .map(|line| line.unwrap_or_default().parse().unwrap_or(0))
         .collect::<Vec<_>>();
     let all_windows = all_numbers.windows(3);
 
