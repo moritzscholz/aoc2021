@@ -10,6 +10,17 @@ where
     Ok(io::BufReader::new(file).lines())
 }
 
+pub fn read_first_line<P>(file: P) -> String
+where
+    P: AsRef<Path>,
+{
+    read_lines(file)
+        .expect("Could not read file containing age of the fishes.")
+        .next()
+        .expect("Could not read first line of the given file.")
+        .expect("Could not turn the first line of the file into a string.")
+}
+
 pub fn read_all<P>(file: P) -> std::io::Result<String>
 where
     P: AsRef<Path>,

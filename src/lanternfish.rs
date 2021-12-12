@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use crate::file_handler::read_lines;
+use crate::file_handler::read_first_line;
 
 pub struct LanternfishColony {
     /// Buckets of fish
@@ -21,13 +21,7 @@ impl LanternfishColony {
     {
         let mut colony = LanternfishColony::new();
 
-        let ages_string = read_lines(file)
-            .expect("Could not read file containing age of the fishes.")
-            .next()
-            .expect("Could not read first line of the given file.")
-            .expect(
-                "Could not turn the first line of the file into a string.",
-            );
+        let ages_string = read_first_line(file);
 
         let ages = ages_string.split(',').map(|age| -> usize {
             age.parse().unwrap_or_else(|_| {
