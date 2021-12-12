@@ -1,7 +1,7 @@
 mod file_handler;
 mod sonar_depth;
 mod submarine;
-use crate::submarine::Submarine;
+use crate::{crab_submarines::FuelBurnRate, submarine::Submarine};
 mod binary_diagnostic;
 mod crab_submarines;
 mod lanternfish;
@@ -72,7 +72,10 @@ fn main() {
         crab_submarines::CrabSubmarineFleet::from_file("data/day7/input.txt");
     print!(
         "Solution for day 7: Position / fuel cost: {:?}. ",
-        fleet.ideal_position_and_fuel()
+        fleet.ideal_position_and_fuel(FuelBurnRate::Constant)
     );
-    println!();
+    println!(
+        "Part 2, with increasing fuel-rate: {:?}. ",
+        fleet.ideal_position_and_fuel(FuelBurnRate::Increasing)
+    );
 }

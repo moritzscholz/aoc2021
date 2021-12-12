@@ -2,6 +2,10 @@ use std::path::Path;
 
 use crate::file_handler::read_first_line;
 
+pub enum FuelBurnRate {
+    Constant,
+    Increasing,
+}
 pub struct CrabSubmarineFleet {
     /// crabs[x] indicates number of crabs at position x.
     crabs: Vec<i32>,
@@ -30,12 +34,23 @@ impl CrabSubmarineFleet {
         CrabSubmarineFleet { crabs }
     }
 
-    fn fuel_cost(&self, destination: usize) -> i32 {
+    fn fuel_cost_constant(&self, destination: usize) -> i32 {
         self.crabs
             .iter()
             .enumerate()
             .map(|(position, n_crabs)| {
                 (destination as i32 - position as i32).abs() * n_crabs
+            })
+            .sum()
+    }
+
+    fn fuel_cost_increasing(&self, destination: usize) -> i32 {
+        self.crabs
+            .iter()
+            .enumerate()
+            .map(|(position, n_crabs)| {
+                let distance = (destination as i32 - position as i32).abs();
+                distance * (distance + 1) / 2 * n_crabs
             })
             .sum()
     }
@@ -53,13 +68,21 @@ impl CrabSubmarineFleet {
 
     /// Returns the position to move the crab submarine fleet to that requires
     /// the least fuel to move to.
-    pub fn ideal_position_and_fuel(&self) -> (usize, i32) {
+    pub fn ideal_position_and_fuel(
+        &self,
+        burn_rate: FuelBurnRate,
+    ) -> (usize, i32) {
         let search_range = self.min_position()..self.max_position();
 
-        let mut min_fuel_cost = self.fuel_cost(self.max_position());
+        let calculate_fuel_cost = |destination| match burn_rate {
+            FuelBurnRate::Constant => self.fuel_cost_constant(destination),
+            FuelBurnRate::Increasing => self.fuel_cost_increasing(destination),
+        };
+
+        let mut min_fuel_cost = calculate_fuel_cost(self.max_position());
         let mut ideal_destination = 0;
         for destination in search_range {
-            let fuel_cost = self.fuel_cost(destination);
+            let fuel_cost = calculate_fuel_cost(destination);
             if fuel_cost < min_fuel_cost {
                 min_fuel_cost = fuel_cost;
                 ideal_destination = destination
@@ -77,15 +100,29 @@ mod tests {
     #[test]
     fn fuel_costs() {
         let fleet = CrabSubmarineFleet::from_file("data/day7/test.txt");
-        assert_eq!(fleet.fuel_cost(2), 37);
-        assert_eq!(fleet.fuel_cost(1), 41);
-        assert_eq!(fleet.fuel_cost(3), 39);
-        assert_eq!(fleet.fuel_cost(10), 71);
+        assert_eq!(fleet.fuel_cost_constant(2), 37);
+        assert_eq!(fleet.fuel_cost_constant(1), 41);
+        assert_eq!(fleet.fuel_cost_constant(3), 39);
+        assert_eq!(fleet.fuel_cost_constant(10), 71);
+
+        assert_eq!(fleet.fuel_cost_increasing(2), 206);
     }
 
     #[test]
-    fn ideal_position() {
+    fn ideal_position_simple() {
         let fleet = CrabSubmarineFleet::from_file("data/day7/test.txt");
-        assert_eq!(fleet.ideal_position_and_fuel(), (2, 37));
+        assert_eq!(
+            fleet.ideal_position_and_fuel(FuelBurnRate::Constant),
+            (2, 37)
+        );
+    }
+
+    #[test]
+    fn ideal_position_increasing() {
+        let fleet = CrabSubmarineFleet::from_file("data/day7/test.txt");
+        assert_eq!(
+            fleet.ideal_position_and_fuel(FuelBurnRate::Increasing),
+            (5, 168)
+        );
     }
 }
