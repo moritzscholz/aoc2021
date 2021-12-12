@@ -3,6 +3,7 @@ mod sonar_depth;
 mod submarine;
 use crate::submarine::Submarine;
 mod binary_diagnostic;
+mod lanternfish;
 mod squid_bingo;
 
 fn main() {
@@ -48,4 +49,16 @@ fn main() {
         "Last board to win, score * last number = {:?}!",
         result_end.answer()
     );
+
+    // Day 5
+
+    // Day 6
+    let mut colony =
+        lanternfish::LanternfishColony::from_file("data/day6/input.txt");
+    colony.simulate_steps(80);
+    print!(
+        "Solution for day 6: There are {} lanternfish after 80 days. ",
+        colony.size()
+    );
+    println!();
 }
