@@ -60,5 +60,9 @@ fn main() {
         "Solution for day 6: There are {} lanternfish after 80 days. ",
         colony.size()
     );
-    println!();
+    colony.simulate_steps(256 - 80);
+    println!(
+        "Part 2: There are {} lanternfish after 256 days.",
+        colony.size()
+    );
 }
