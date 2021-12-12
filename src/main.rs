@@ -3,6 +3,7 @@ mod sonar_depth;
 mod submarine;
 use crate::submarine::Submarine;
 mod binary_diagnostic;
+mod crab_submarines;
 mod lanternfish;
 mod squid_bingo;
 
@@ -65,4 +66,13 @@ fn main() {
         "Part 2: There are {} lanternfish after 256 days.",
         colony.size()
     );
+
+    // Day 7
+    let fleet =
+        crab_submarines::CrabSubmarineFleet::from_file("data/day7/input.txt");
+    print!(
+        "Solution for day 7: Position / fuel cost: {:?}. ",
+        fleet.ideal_position_and_fuel()
+    );
+    println!();
 }
