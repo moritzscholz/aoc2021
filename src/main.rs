@@ -1,12 +1,16 @@
 mod file_handler;
 mod sonar_depth;
 mod submarine;
-use crate::{crab_submarines::FuelBurnRate, submarine::Submarine};
+use crate::{
+    crab_submarines::FuelBurnRate, submarine::Submarine,
+    transparent_origami::TransparentPaper,
+};
 mod binary_diagnostic;
 mod cave_floor_scanner;
 mod crab_submarines;
 mod lanternfish;
 mod squid_bingo;
+mod transparent_origami;
 
 fn main() {
     // Day 1
@@ -87,4 +91,16 @@ fn main() {
         cave_floor_scanner::CaveFloorScanner::from_file("data/day9/input.txt");
     print!("Solution for day 9: Cave risk is {}. ", scanner.cave_risk());
     println!();
+
+    // Day 13
+    let mut paper = TransparentPaper::from_file("data/day13/input.txt");
+    paper.fold();
+    print!(
+        "Solution for day 13: Paper has {} markings after first fold.",
+        paper.num_marked()
+    );
+    println!();
+    println!("Final folded paper:");
+    while paper.fold() {}
+    paper.dump();
 }
