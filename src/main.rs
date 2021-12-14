@@ -9,6 +9,7 @@ mod binary_diagnostic;
 mod cave_floor_scanner;
 mod crab_submarines;
 mod lanternfish;
+mod polymerization;
 mod squid_bingo;
 mod transparent_origami;
 
@@ -103,4 +104,16 @@ fn main() {
     println!("Final folded paper:");
     while paper.fold() {}
     paper.dump();
+
+    // Day 14
+    let mut polymerizer =
+        polymerization::Polymerizer::from_file("data/day14/input.txt");
+    for _ in 0..10 {
+        polymerizer.step();
+    }
+    print!(
+        "Solution for day 14: After 10 steps, the solution is {}. ",
+        polymerizer.solution()
+    );
+    println!();
 }
