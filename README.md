@@ -8,14 +8,18 @@ All solutions will be in this one repository. Input and test data for each day i
 
 ## Language
 
-Right now, I plan to do all challenges with Rust. Pulling the repository and running `cargo run` will build the crate and calculate all solutions I have done so far.
+I want to do most of the solutions with Rust and some with Python. Pulling the repository and running `cargo run` will build the crate and calculate all solutions I have done so far in Rust.
+
+Python-solutions can be done via `poetry run python py_src/solutions.py`.
 
 ## Tests
 
 Tests can be run with `cargo test`. Tests are included in the source-file of the code they are testing.
 
+Python-tests can be run with `poetry run pytest`.
+
 ## Progress
 ⭐️⭐️⭐️⭐️⭐️☆⭐️⭐️☆☆
 ⭐️⭐️⭐️⭐️☆☆⭐️☆☆☆☆☆☆☆
-⭐️⭐️☆☆☆☆☆☆☆☆☆☆☆☆
+⭐️⭐️⭐️☆☆☆☆☆☆☆☆☆☆☆
 ☆☆☆☆☆☆☆☆☆☆☆☆
