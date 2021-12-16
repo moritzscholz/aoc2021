@@ -7,6 +7,7 @@ use crate::{
 };
 mod binary_diagnostic;
 mod cave_floor_scanner;
+mod cave_navigation;
 mod crab_submarines;
 mod lanternfish;
 mod squid_bingo;
@@ -103,4 +104,9 @@ fn main() {
     println!("Final folded paper:");
     while paper.fold() {}
     paper.dump();
+
+    // Day 15
+    let cave = cave_navigation::Cave::from_grid_file("data/day15/input.txt");
+    print!("Lowest total risk is {}. ", cave.lowest_total_risk());
+    println!();
 }
