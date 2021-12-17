@@ -116,9 +116,10 @@ fn main() {
         185..=221,
         -122..=-74,
     );
-    print!(
-        "Highest shot reaches height {}. ",
-        sim.initial_velocity_for_highest_shot().1
+    let (highest_y, v_count) = sim.initial_velocity_for_highest_shot();
+    print!("Highest shot reaches height {}. ", highest_y);
+    println!(
+        "There are {} initial velocity values hitting the target area.",
+        v_count
     );
-    println!();
 }
