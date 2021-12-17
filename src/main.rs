@@ -12,6 +12,7 @@ mod crab_submarines;
 mod lanternfish;
 mod squid_bingo;
 mod transparent_origami;
+mod trench_exploration;
 
 fn main() {
     // Day 1
@@ -108,5 +109,16 @@ fn main() {
     // Day 15
     let cave = cave_navigation::Cave::from_grid_file("data/day15/input.txt");
     print!("Lowest total risk is {}. ", cave.lowest_total_risk());
+    println!();
+
+    // Day 17
+    let sim = trench_exploration::ProbeLauncherSimulation::new(
+        185..=221,
+        -122..=-74,
+    );
+    print!(
+        "Highest shot reaches height {}. ",
+        sim.initial_velocity_for_highest_shot().1
+    );
     println!();
 }
